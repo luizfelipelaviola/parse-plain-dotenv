@@ -9,9 +9,23 @@ branding:
 
 inputs:
   data:
-    description: |-
-      Text input following the dotenv format
+    description: The doenv syntax string to be parsed
     required: true
+
+  parse-env:
+    description: Sets whether the action should pass the content to build environment
+    required: false
+    default: 'true'
+
+  write-env-file:
+    description: Sets whether the action should write a .env file with the content
+    required: false
+    default: 'false'
+
+  env-file-path:
+    description: Sets the path of the .env file to be written
+    required: false
+    default: '.env'
 
 runs:
   using: 'node16'

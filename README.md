@@ -16,32 +16,37 @@ This action was designed thinking on a different use of the Google Secret Manage
 jobs:
   job_id:
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
 
     steps:
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v1'
+    - name: Google auth
+      id: auth
+      uses: google-github-actions/auth@v1
       with:
-        workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-        service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+        workload_identity_provider: projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+        service_account: my-service-account@my-project.iam.gserviceaccount.com
 
-    - id: 'secrets'
-      uses: 'google-github-actions/get-secretmanager-secrets@v1'
+    - name: Get env from Google Secret Manager
+      id: secrets
+      uses: google-github-actions/get-secretmanager-secrets@v1
       with:
         secrets: |-
-          env-variables:my-project/docker-registry-env-variables
+          env-variables:my-project/my-secret-manager-env-name
 
-    - id: 'parse'
-      uses: 'luizfelipelaviola/parse-plain-dotenv@v1'
+    - name: Parse dotenv to .env file and set to build environment variables
+      uses: luizfelipelaviola/parse-plain-dotenv@v1
       with:
-        data: '${{ steps.secrets.outputs.env-variables }}'
+        data: ${{ steps.secrets.outputs.env-variables }}
+        parse-env: true
+        write-env-file: true
 
-    # Example of using the output
-    - id: 'publish'
-      uses: 'foo/bar@main'
+    # Example of using the environment variables
+    - name: Deploy
+      id: publish
+      uses: foo/bar@main
       env:
-        TOKEN: '${{ env.token }}'
+        SOMETHING: ${{ env.something }}
 ```
 
 ## Prerequisites
@@ -50,9 +55,16 @@ jobs:
 
 ## Inputs
 
-- `data`: The dotenv syntax string to be parsed.
+| Property | Is Required | Default | Comment | Example |
+|----------|-------------|---------|---------|---------|
+| data     | x           |         | the doenv syntax string to be parsed | SOME_VARIABLE=some-string ANOTHER_VARIABLE=another-string |
+| parse-env |            | true    | sets whether the action should pass the content to build environment |  |
+| write-env-file |       | false   | sets whether the action should write a .env file with the content    |  |
+| env-file-path |        | .env    | sets the path of the .env file to be written | src/.env.something |
 
 ## Notes
+
+🚨 This action may expose your secrets to the public. Be careful when using it.
 
 This action was inspired by [dotenv github action](https://github.com/xom9ikk/dotenv) and [google-github-actions/get-secretmanager-secrets](https://github.com/google-github-actions/get-secretmanager-secrets).
 
