@@ -1,0 +1,40 @@
+{
+  "name": "parse-plain-dotenv",
+  "version": "1.0.0",
+  "description": "Plain dotenv input parser Github action",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build -m src/main.ts",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write **/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luizfelipelaviola/parse-plain-dotenv.git"
+  },
+  "keywords": [
+    "actions",
+    "parse",
+    "environment",
+    "dotenv",
+    "env"
+  ],
+  "author": "Luiz Felipe Laviola <luiz@laviola.dev>",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.2",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "@vercel/ncc": "^0.36.1",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  }
+}
