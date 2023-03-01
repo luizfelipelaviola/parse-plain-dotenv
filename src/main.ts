@@ -6,7 +6,7 @@ function main() {
   try {
     const dataInput = getInput('data', { required: true });
     const parseEnvInput = getInput('parse-env', { required: false }) === 'true';
-    const writeEnvInput = getInput('write-env', { required: false }) === 'true';
+    const writeEnvInput = getInput('write-env-file', { required: false }) === 'true';
     const envFilePath = getInput('env-file-path', { required: false });
 
     const parsed = parse(dataInput);
@@ -16,6 +16,7 @@ function main() {
         exportVariable(key, value);
       });
 
+    console.log('done');
     if (writeEnvInput) {
       if (!envFilePath) throw new Error('env-file-path is required');
       writeFileSync(envFilePath, dataInput);
