@@ -20,33 +20,36 @@ jobs:
       id-token: write
 
     steps:
-    - name: Google auth
-      id: auth
-      uses: google-github-actions/auth@v1
-      with:
-        workload_identity_provider: projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
-        service_account: my-service-account@my-project.iam.gserviceaccount.com
+      - name: Checkout to branch
+        uses: actions/checkout@v3
+        
+      - name: Google auth
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+          service_account: my-service-account@my-project.iam.gserviceaccount.com
 
-    - name: Get env from Google Secret Manager
-      id: secrets
-      uses: google-github-actions/get-secretmanager-secrets@v1
-      with:
-        secrets: |-
-          env-variables:my-project/my-secret-manager-env-name
+      - name: Get env from Google Secret Manager
+        id: secrets
+        uses: google-github-actions/get-secretmanager-secrets@v1
+        with:
+          secrets: |-
+            env-variables:my-project/my-secret-manager-env-name
 
-    - name: Parse dotenv to .env file and set to build environment variables
-      uses: luizfelipelaviola/parse-plain-dotenv@v1
-      with:
-        data: ${{ steps.secrets.outputs.env-variables }}
-        parse-env: true
-        write-env-file: true
+      - name: Parse dotenv to .env file and set to build environment variables
+        uses: luizfelipelaviola/parse-plain-dotenv@v1
+        with:
+          data: ${{ steps.secrets.outputs.env-variables }}
+          parse-env: true
+          write-env-file: true
 
-    # Example of using the environment variables
-    - name: Deploy
-      id: publish
-      uses: foo/bar@main
-      env:
-        SOMETHING: ${{ env.something }}
+      # Example of using the environment variables
+      - name: Deploy
+        id: publish
+        uses: foo/bar@main
+        env:
+          SOMETHING: ${{ env.something }}
 ```
 
 ## Prerequisites
