@@ -11,12 +11,17 @@ function main() {
 
     const parsed = parse(dataInput);
 
-    if (parseEnvInput)
+    if (parseEnvInput) {
       Object.entries(parsed).forEach(([key, value]) => {
         exportVariable(key, value);
       });
+      console.log('✅ Environment variables exported to environment.');
+    }
 
-    if (writeEnvInput) writeFileSync(envFilePath || '.env', dataInput);
+    if (writeEnvInput) {
+      writeFileSync(envFilePath || '.env', dataInput);
+      console.log('✅ Environment variables stored into the .env file.');
+    }
   } catch (err) {
     if (err instanceof Error) setFailed(err.message);
     else setFailed('Unknown error');
